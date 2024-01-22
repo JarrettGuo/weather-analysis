@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天知道</title>
+     <link rel="stylesheet" href="../static/static/css/style.css" />
+    <link rel="stylesheet" href="../static/static/css/reset.css" />
+    <link rel="stylesheet" href="../static/css/index.css" />
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/css/morris-0.4.3.min.css" />
+    <link rel="stylesheet" href="../static/css/animate.css" />
+
+</head>
+<body>
+    <div class="wrap" id="app">
+        <div class="search_form">
+          <div class="logo"><img src="../static/img/logo2.png" alt="logo" /></div>
+          <div class="form_group">
+            <input type="text" v-model="city"  @keyup.enter="searchWeather" class="input_txt" placeholder="请输入查询的天气"/>
+            <button class="input_sub" @click="searchWeather">
+              搜 索
+            </button>
+          </div>
+          <div class="hotkey">
+            <a href="javascript:;"  @click='changeCity("北京")'>北京</a>
+            <a href="javascript:;"  @click='changeCity("上海")'>上海</a>
+            <a href="javascript:;"  @click='changeCity("广州")'>广州</a>
+            <a href="javascript:;"  @click='changeCity("深圳")'>深圳</a>
+          </div>
+        </div>
+        <ul class="weather_list">
+          <li v-for="item in weatherList">
+            <div class="info_type"><span class="iconfont">{{ item.type }}</span></div>
+            <div class="info_temp">
+              <b>{{ item.low }}</b>
+              ~
+              <b>{{ item.high }}</b>
+            </div>
+            <div class="info_date"><span>{{ item.date }}</span></div>
+          </li>
+        </ul>
+
+        <div class="wrapper wrapper-content animated fadeInRight" style="margin: 200px">
+
+            <div class="row">
+                <div class="col-lg-6">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>气温预测 <small>[最高、最低]</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">选项 1</a>
+                                </li>
+                                <li><a href="#" class="dropdown-item">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="position: relative">
+                        <div id="morris-area-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>空气质量<small>[PM2.5]</small> </h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">选项 1</a>
+                                </li>
+                                <li><a href="#" class="dropdown-item">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="morris-bar-chart"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>降雨量预测 </h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#" class="dropdown-item">选项 1</a>
+                                    </li>
+                                    <li><a href="#" class="dropdown-item">选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div id="morris-line-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>空气湿度</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#" class="dropdown-item">选项 1</a>
+                                    </li>
+                                    <li><a href="#" class="dropdown-item">选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div id="morris-donut-chart" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+    <script src="../static/js/jquery-3.1.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/morris.js"></script>
+    <script src="../static/js/raphael-2.1.0.min.js"></script>
+    <script src="../static/js/morris-demo.js"></script>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 官网提供的 axios 在线地址 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- 自己的js -->
+    <script>
+      var app = new Vue({
+          el:"#app",
+          data:{
+              city: "",
+              weatherList: []
+          },
+
+          methods:{
+            searchWeather:function(){
+                var that = this;
+                // http://wthrcdn.etouch.cn/weather_mini?city=
+                axios.get('http://localhost:5000/weather?city='+this.city)
+                .then(function(response){
+                    console.log(response.data.data.forecast);
+                    that.weatherList = response.data.data.forecast;
+                    $('#morris-area-chart').empty();
+                    $('#morris-donut-chart').empty();
+                    $('#morris-bar-chart').empty();
+                    $('#morris-line-chart').empty();
+                    console.log(that.city)
+                    that.loadChart(that.city);
+
+                },function(err){
+
+                })
+            },
+            changeCity:function(ct){
+                this.city = ct;
+                this.searchWeather();
+            },
+
+            loadChart:function (city){
+
+                 axios.get('http://127.0.0.1:5000/weather/chart/temp?city='+city)
+                .then(function(response){
+                    console.log(response.data);
+                    Morris.Line({
+                        element: 'morris-area-chart',
+                        data: response.data,
+                        xkey: 'period',
+                        ykeys: ['high', 'temp', 'low'],
+                        labels: ['high', 'temp', 'low'],
+                        pointSize: 3,
+                        hideHover: 'auto',
+                        resize: true,
+                        lineColors: ['red', 'orange','blue'],
+                        lineWidth:2,
+                        //pointSize:1,
+                    });
+                },function(err){
+
+                });
+
+                axios.get('http://127.0.0.1:5000/weather/chart/aqi?city='+city)
+                .then(function(response){
+                    console.log(response.data);
+                    Morris.Bar({
+                    element: 'morris-bar-chart',
+                    data: response.data,
+                    xkey: 'date',
+                    ykeys: ['value'],
+                    labels: ['pm2.5'],
+                    hideHover: 'auto',
+                    resize: true,
+                    barColors: ['#1ab394'],
+                });
+                },function(err){
+
+                })
+
+                axios.get('http://127.0.0.1:5000/weather/chart/humi?city='+city)
+                .then(function(response){
+                    console.log(response.data);
+                    Morris.Donut({
+                        element: 'morris-donut-chart',
+                        data: response.data,
+                        resize: true,
+                        colors: ['#87d6c6', '#54cdb4','#1ab394'],
+                    });
+                },function(err){
+
+                })
+
+                axios.get('http://127.0.0.1:5000/weather/chart/rainfall?city='+city)
+                .then(function(response){
+                    console.log(response.data);
+                    Morris.Line({
+                        element: 'morris-line-chart',
+                        data: response.data,
+                        xkey: 'date',
+                        ykeys: ['value'],
+                        labels: ['降雨量(mm)'],
+                        hideHover: 'auto',
+                        resize: true,
+                        lineColors: ['#54cdb4','#1ab394'],
+                    });
+                },function(err){
+
+                })
+
+            }
+          }
+      })
+    </script>
+
+</html>
